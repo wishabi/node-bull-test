@@ -27,15 +27,19 @@ app.get('/count', function(req, res) {
 
 app.get('/add_job', function(req, res) {
   console.log("/add_job")
+  var data = req.query.data
+  var priority = req.query.priority
+  console.log("data:", data)
+  console.log("priority:", priority)
   bullQueue.add(
     {
-      data: "here is some data and things."
+      data: data
     },
     {
-      priority: 9999
+      priority: priority
     }
   ).then(function() {
-    res.send("Job added.")
+    res.send("Job added. Data: " + data + " | Priority: " + priority)
   });
 })
 
