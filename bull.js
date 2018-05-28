@@ -1,5 +1,6 @@
 console.log("Starting Processor")
 
+const Path = require('path');
 const Express = require('express')
 const Queue = require('bull');
 
@@ -12,10 +13,15 @@ bullQueue.process(function(job, done) {
 
 const app = Express()
 
+app.use('/', Express.static(__dirname + '/public'));
+
 app.get('/count', function(req, res) {
   console.log("/count")
   bullQueue.count().then(function(count) {
-    res.send(['Count: ', count].join(""))
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+      count: count
+    }));
   })
 })
 
