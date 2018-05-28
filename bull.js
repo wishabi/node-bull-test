@@ -7,7 +7,10 @@ const Queue = require('bull');
 var bullQueue = new Queue('Just a bunch of Bull$#!#');
 
 bullQueue.process(function(job, done) {
-  console.log("Incoming $#!#:", job)
+  console.log("Incoming $#!#:")
+  console.log("Data: ", job["data"])
+  console.log("Options: ", job["opts"])
+  console.log("-----------------------------------------------------")
   done()
 });
 
