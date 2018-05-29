@@ -15,7 +15,7 @@ function fetch_count() {
 
 window.setInterval(function() {
   fetch_count()
-}, 1000);
+}, 500);
 
 // "Add job" handler
 function add_job_handler() {
