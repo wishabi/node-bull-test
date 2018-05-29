@@ -11,7 +11,9 @@ bullQueue.process(function(job, done) {
   console.log("Data: ", job["data"])
   console.log("Options: ", job["opts"])
   console.log("-----------------------------------------------------")
-  done()
+  setTimeout(function() {
+    done()
+  }, 2000)
 });
 
 const app = Express()
@@ -64,6 +66,5 @@ app.get('/empty', function(req, res) {
     res.send("Queue is cleared.")
   })
 })
-
 
 app.listen(3000, () => console.log('Bull app listening on port 3000!'))
