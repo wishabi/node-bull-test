@@ -4,7 +4,17 @@ const Path = require('path');
 const Express = require('express')
 const Queue = require('bull');
 
-var bullQueue = new Queue('Just a bunch of Bull$#!#');
+const CLEAN_GRACE_PERIOD = 1000;
+
+var bullQueue = new Queue(
+  'Just a bunch of Bull$#!#',
+  {
+    limiter: { // RateLimiter
+      max: 5,         // Max number of jobs processed
+      duration: 1000, // per duration in milliseconds
+    }
+  }
+);
 
 bullQueue.process(function(job, done) {
   console.log("Incoming $#!#:")
@@ -62,8 +72,21 @@ app.get('/resume', function(req, res) {
 
 app.get('/empty', function(req, res) {
   console.log("/empty")
-  bullQueue.empty().then(function() {
-    res.send("Queue is cleared.")
+
+  var active_promise = bullQueue.clean(CLEAN_GRACE_PERIOD, 'active')
+  var waiting_promise = bullQueue.clean(CLEAN_GRACE_PERIOD, 'waiting')
+  var completed_promise = bullQueue.clean(CLEAN_GRACE_PERIOD, 'completed')
+  var failed_promise = bullQueue.clean(CLEAN_GRACE_PERIOD, 'failed')
+  var delayed_promise = bullQueue.clean(CLEAN_GRACE_PERIOD, 'delayed')
+
+  Promise.all([
+    active_promise,
+    waiting_promise,
+    completed_promise,
+    failed_promise,
+    delayed_promise
+  ]).then(function() {
+    res.send("Queues have been cleared with grace period of " + CLEAN_GRACE_PERIOD + " ms.")
   })
 })
 
