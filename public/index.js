@@ -40,3 +40,8 @@ $("#resume").click(function() {
     console.log("Response: ", data)
   })
 })
+$("#empty").click(function() {
+  $.get("/empty", function(data) {
+    console.log("Response: ", data)
+  })
+})

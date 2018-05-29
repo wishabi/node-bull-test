@@ -58,5 +58,12 @@ app.get('/resume', function(req, res) {
   })
 })
 
+app.get('/empty', function(req, res) {
+  console.log("/empty")
+  bullQueue.empty().then(function() {
+    res.send("Queue is cleared.")
+  })
+})
+
 
 app.listen(3000, () => console.log('Bull app listening on port 3000!'))
