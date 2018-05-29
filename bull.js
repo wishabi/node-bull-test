@@ -20,11 +20,9 @@ app.use('/', Express.static(__dirname + '/public'));
 
 app.get('/count', function(req, res) {
   console.log("/count")
-  bullQueue.count().then(function(count) {
+  bullQueue.getJobCounts().then(function(counts) {
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-      count: count
-    }));
+    res.send(JSON.stringify(counts));
   })
 })
 

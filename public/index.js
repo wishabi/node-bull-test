@@ -5,12 +5,14 @@ function fetch_count() {
   // console.log("Fetching count")
   $.getJSON("/count", function(data) {
     // console.log("Response: ", data)
-    set_count(data["count"])
+    $("#active").text(data["active"])
+    $("#waiting").text(data["waiting"])
+    $("#completed").text(data["completed"])
+    $("#failed").text(data["failed"])
+    $("#delayed").text(data["delayed"])
   })
 }
-function set_count(count) {
-  $("#count").text(count)
-}
+
 window.setInterval(function() {
   fetch_count()
 }, 1000);
@@ -33,7 +35,6 @@ $("#pause").click(function() {
     console.log("Response: ", data)
   })
 })
-
 $("#resume").click(function() {
   $.get("/resume", function(data) {
     console.log("Response: ", data)
