@@ -24,7 +24,7 @@ app.get('/count', function(req, res) {
   // console.log("/count")
   bullQueue.getJobCounts().then(function(counts) {
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(counts));
+    res.send(JSON.stringify(counts, null, 3));
   })
 })
 
@@ -64,6 +64,30 @@ app.get('/empty', function(req, res) {
   console.log("/empty")
   bullQueue.empty().then(function() {
     res.send("Queue is cleared.")
+  })
+})
+
+app.get('/get_jobs', function(req, res) {
+  // console.log("/get_jobs")
+  bullQueue.getJobs().then(function(jobs) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(jobs, null, 3))
+  })
+})
+
+app.get('/get_waiting', function(req, res) {
+  // console.log("/get_waiting")
+  bullQueue.getWaiting().then(function(jobs) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(jobs, null, 3))
+  })
+})
+
+app.get('/get_active', function(req, res) {
+  // console.log("/get_active")
+  bullQueue.getActive().then(function(jobs) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(jobs, null, 3))
   })
 })
 

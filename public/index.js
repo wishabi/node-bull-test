@@ -12,9 +12,34 @@ function fetch_count() {
     $("#delayed").text(data["delayed"])
   })
 }
-
 window.setInterval(function() {
   fetch_count()
+}, 500);
+
+// Active job fetcher
+function create_td(text) {
+  var element = document.createElement("td")
+  element.innerText = text
+  return element
+}
+
+function fetch_active_jobs() {
+  // console.log("Fetching count")
+  $.getJSON("/get_active", function(data) {
+    console.log("Response: ", data)
+    $("#active_jobs tr").remove()
+    $.each(data, function(index, job) {
+      var row = document.createElement("tr")
+      row.append(create_td(index))
+      row.append(create_td(job["opts"]["priority"]))
+      row.append(create_td(JSON.stringify(job["data"])))
+      row.append(create_td(JSON.stringify(job["opts"])))
+      $("#active_jobs").append(row)
+    })
+  })
+}
+window.setInterval(function() {
+  fetch_active_jobs()
 }, 500);
 
 // "Add job" handler
