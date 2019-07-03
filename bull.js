@@ -10,8 +10,7 @@ var bullQueue = new Queue(
   'Just a bunch of Bull$#!#',
   {
     limiter: { // RateLimiter
-      max: 5,         // Max number of jobs processed
-      duration: 1000, // per duration in milliseconds
+      max: 5         // Max number of jobs processed
     }
   }
 );
