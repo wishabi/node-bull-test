@@ -55,10 +55,10 @@ app.get('/add_job', function(req, res) {
   console.log("/add_job")
   var data = req.query.data
   var priority = req.query.priority
-  var merchant_id = req.query.merchant_id
+  var throttle_id = req.query.throttle_id
   console.log("data:", data)
   console.log("priority:", priority)
-  console.log("merchant_id:", merchant_id)
+  console.log("throttle_id:", throttle_id)
   // Job is a "promise" here
   job = bullQueue.add(
     {
@@ -66,10 +66,10 @@ app.get('/add_job', function(req, res) {
     },
     {
       priority: priority,
-      merchant_id: merchant_id
+      throttle_id: throttle_id
     }
   ).then(function() {
-    res.send("Job added. Data: " + data + " | Priority: " + priority + " | Merchant Id: " + merchant_id);
+    res.send("Job added. Data: " + data + " | Priority: " + priority + " | Merchant Id: " + throttle_id);
   });
 })
 

@@ -71,9 +71,9 @@ function add_job_handler() {
   console.log("add_job_handler")
   var data = $("#data").val()
   var priority = $("#priority").val()
-  var merchant_id = $("#merchant_id").val()
-  console.log("Data: ", data, " | Priority: ", priority, " | Merchant Id: ", merchant_id)
-  $.get("/add_job", { data: data, priority: priority, merchant_id: merchant_id}, function(data) {
+  var throttle_id = $("#throttle_id").val()
+  console.log("Data: ", data, " | Priority: ", priority, " | Merchant Id: ", throttle_id)
+  $.get("/add_job", { data: data, priority: priority, throttle_id: throttle_id}, function(data) {
     console.log("Response: ", data)
   })
 }
@@ -84,11 +84,11 @@ function add_job_batch_handler() {
   console.log("add_job_batch_handler")
   var data = $("#data").val()
   var priority = $("#priority").val()
-  var merchant_id = $("#merchant_id").val()
+  var throttle_id = $("#throttle_id").val()
   var batch = $("#batch").val()
-  console.log("Data: ", data, " | Priority: ", priority, " | Merchant Id: ", merchant_id, " | Batch: ", batch)
+  console.log("Data: ", data, " | Priority: ", priority, " | Merchant Id: ", throttle_id, " | Batch: ", batch)
   for (let i = 0; i < batch; i ++) {
-    $.get("/add_job", { data: data, priority: priority, merchant_id: merchant_id}, function(data) {
+    $.get("/add_job", { data: data, priority: priority, throttle_id: throttle_id}, function(data) {
       console.log("Response: ", data)
     })
   }
