@@ -18,6 +18,7 @@
   "homepage": "https://github.com/wishabi/node-bull-test#readme",
   "dependencies": {
     "bull": "../bull",
-    "express": "^3.10.10"
-  }
+    "express": "^4.13.4"
+  },
+  "devDependencies": {}
 }
