@@ -10,6 +10,7 @@ var bullQueue = new Queue(
   'BullQ',
   'MyQueue',
   {
+    prefix: "leptin",
     limiter: { // RateLimiter
       max: 10,         // Max number of jobs processed
       duration: 3000, // per duration in milliseconds
@@ -25,8 +26,7 @@ const getTimeout = function(range, rate){
   return (Math.floor(Math.random() * range) + 1) * rate
 }
 
-console.log(Queue);
-// console.log(Queue.prototype);
+console.log(bullQueue);
 
 bullQueue.process(5, function(job, done) {
   console.log("Incoming $#!#:")
