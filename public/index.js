@@ -31,7 +31,7 @@ function fetch_active_jobs() {
     $.each(data, function(index, job) {
       var row = document.createElement("tr")
       row.append(create_td(index))
-      row.append(create_td(job["opts"]["priority"]))
+      row.append(create_td(job["opts"]["throttleID"]))
       row.append(create_td(JSON.stringify(job["data"])))
       row.append(create_td(JSON.stringify(job["opts"])))
       $("#active_jobs").append(row)
@@ -51,7 +51,7 @@ function fetch_waiting_jobs() {
     $.each(data, function(index, job) {
       var row = document.createElement("tr")
       row.append(create_td(index))
-      row.append(create_td(job["opts"]["priority"]))
+      row.append(create_td(job["opts"]["throttleID"]))
       row.append(create_td(JSON.stringify(job["data"])))
       row.append(create_td(JSON.stringify(job["opts"])))
       $("#waiting_jobs").append(row)
@@ -67,9 +67,9 @@ window.setInterval(function() {
 function add_job_handler() {
   console.log("add_job_handler")
   var data = $("#data").val()
-  var priority = $("#priority").val()
-  console.log("Data: ", data, " | Priority: ", priority)
-  $.get("/add_job", { data: data, priority: priority }, function(data) {
+  var throttleID = $("#throttleID").val()
+  console.log("Data: ", data, " | ThrottleId: ", throttleID)
+  $.get("/add_job", { data: data, throttleID: throttleID }, function(data) {
     console.log("Response: ", data)
   })
 }

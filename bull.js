@@ -5,6 +5,15 @@ const Express = require('express')
 const Queue = require('bull');
 
 const CLEAN_GRACE_PERIOD = 1000;
+const redis = require('ioredis');
+
+var throttleTable = new redis();
+
+throttleTable.set("Merchant1", "1");
+throttleTable.set("Merchant2", "3");
+throttleTable.set("Merchant3", "1");
+
+
 
 var bullQueue = new Queue(
   'Just a bunch of Bull$#!#',
@@ -16,12 +25,12 @@ var bullQueue = new Queue(
   }
 );
 
-bullQueue.process(function(job, done) {
+bullQueue.process(function (job, done) {
   console.log("Incoming $#!#:")
   console.log("Data: ", job["data"])
   console.log("Options: ", job["opts"])
   console.log("-----------------------------------------------------")
-  setTimeout(function() {
+  setTimeout(function () {
     done()
   }, 2000)
 });
@@ -30,47 +39,54 @@ const app = Express()
 
 app.use('/', Express.static(__dirname + '/public'));
 
-app.get('/count', function(req, res) {
+app.get('/count', function (req, res) {
   // console.log("/count")
-  bullQueue.getJobCounts().then(function(counts) {
+  bullQueue.getJobCounts().then(function (counts) {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(counts, null, 3));
   })
 })
 
-app.get('/add_job', function(req, res) {
+app.get('/add_job', function (req, res) {
   console.log("/add_job")
   var data = req.query.data
-  var priority = req.query.priority
+  var throttleID = req.query.throttleID
   console.log("data:", data)
-  console.log("priority:", priority)
+  console.log("throttleID:", throttleID)
   bullQueue.add(
     {
       data: data
     },
     {
-      priority: priority
+      throttleID: throttleID
     }
-  ).then(function() {
-    res.send("Job added. Data: " + data + " | Priority: " + priority)
-  });
+  ).then(
+    res.send("Job added. Data: " + data + " | ThrottleId: " + throttleID)
+  ).then(function (data) {
+    console.log("checkThrottleID");
+    
+    //throttleTable.keys('*', (_, keys)=> console.log("keys", keys))
+      const bla = data.getThrottleLimit(throttleTable)
+      console.log(bla)
+    })
+    .catch(err => { throw (err) });
 })
 
-app.get('/pause', function(req, res) {
+app.get('/pause', function (req, res) {
   console.log("/pause")
-  bullQueue.pause().then(function() {
+  bullQueue.pause().then(function () {
     res.send("Queue is paused.")
   })
 })
 
-app.get('/resume', function(req, res) {
+app.get('/resume', function (req, res) {
   console.log("/resume")
-  bullQueue.resume().then(function() {
+  bullQueue.resume().then(function () {
     res.send("Queue is resumed.")
   })
 })
 
-app.get('/empty', function(req, res) {
+app.get('/empty', function (req, res) {
   console.log("/empty")
 
   var active_promise = bullQueue.clean(CLEAN_GRACE_PERIOD, 'active')
@@ -85,30 +101,30 @@ app.get('/empty', function(req, res) {
     completed_promise,
     failed_promise,
     delayed_promise
-  ]).then(function() {
+  ]).then(function () {
     res.send("Queues have been cleared with grace period of " + CLEAN_GRACE_PERIOD + " ms.")
   })
 })
 
-app.get('/get_jobs', function(req, res) {
+app.get('/get_jobs', function (req, res) {
   // console.log("/get_jobs")
-  bullQueue.getJobs().then(function(jobs) {
+  bullQueue.getJobs().then(function (jobs) {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(jobs, null, 3))
   })
 })
 
-app.get('/get_waiting', function(req, res) {
+app.get('/get_waiting', function (req, res) {
   // console.log("/get_waiting")
-  bullQueue.getWaiting().then(function(jobs) {
+  bullQueue.getWaiting().then(function (jobs) {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(jobs, null, 3))
   })
 })
 
-app.get('/get_active', function(req, res) {
+app.get('/get_active', function (req, res) {
   // console.log("/get_active")
-  bullQueue.getActive().then(function(jobs) {
+  bullQueue.getActive().then(function (jobs) {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(jobs, null, 3))
   })

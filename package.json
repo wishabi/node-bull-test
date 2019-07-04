@@ -1,0 +1,25 @@
+{
+  "name": "bull-test",
+  "version": "1.0.0",
+  "description": "A simple test app created to demo the use of the \"Bull\" job queue package: https://github.com/OptimalBits/bull",
+  "main": "bull.js",
+  "dependencies": {
+    "bull": "../bull/",
+    "express": "^4.16.3",
+    "ioredis": "^4.11.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "NODE_DEBUG=bull node bull.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wishabi/node-bull-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wishabi/node-bull-test/issues"
+  },
+  "homepage": "https://github.com/wishabi/node-bull-test#readme"
+}
