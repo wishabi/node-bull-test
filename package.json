@@ -4,7 +4,7 @@
   "description": "A simple app to test out functionality of the Bull package",
   "main": "bull.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_DEBUG=bull node bull.js",
   },
   "repository": {
     "type": "git",
