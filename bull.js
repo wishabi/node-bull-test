@@ -7,7 +7,7 @@ const Queue = require('bull');
 const CLEAN_GRACE_PERIOD = 1000;
 
 var bullQueue = new Queue(
-  'Just a bunch of Bull$#!#',
+  'BullQ',
   'MyQueue',
   {
     limiter: { // RateLimiter
