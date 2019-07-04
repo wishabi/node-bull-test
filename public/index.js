@@ -6,6 +6,16 @@ function create_td(text) {
   return element
 }
 
+function create_job_row(index, job) {
+  var row = document.createElement("tr")
+  row.append(create_td(index))
+  row.append(create_td(job.id))
+  row.append(create_td(job["opts"]["priority"]))
+  row.append(create_td(JSON.stringify(job["data"])))
+  row.append(create_td(JSON.stringify(job["opts"])))
+  return row
+}
+
 // Count fetcher
 function fetch_count() {
   // console.log("Fetching count")
@@ -20,7 +30,7 @@ function fetch_count() {
 }
 window.setInterval(function() {
   fetch_count()
-}, 500);
+}, 250);
 
 // Active job fetcher
 function fetch_active_jobs() {
@@ -29,18 +39,15 @@ function fetch_active_jobs() {
     // console.log("Response: ", data)
     $("#active_jobs tr").remove()
     $.each(data, function(index, job) {
-      var row = document.createElement("tr")
-      row.append(create_td(index))
-      row.append(create_td(job["opts"]["priority"]))
-      row.append(create_td(JSON.stringify(job["data"])))
-      row.append(create_td(JSON.stringify(job["opts"])))
+      var row = create_job_row(index, job)
       $("#active_jobs").append(row)
     })
   })
 }
+
 window.setInterval(function() {
   fetch_active_jobs()
-}, 500);
+}, 250);
 
 // Waiting job fetcher
 function fetch_waiting_jobs() {
@@ -49,18 +56,14 @@ function fetch_waiting_jobs() {
     // console.log("Response: ", data)
     $("#waiting_jobs tr").remove()
     $.each(data, function(index, job) {
-      var row = document.createElement("tr")
-      row.append(create_td(index))
-      row.append(create_td(job["opts"]["priority"]))
-      row.append(create_td(JSON.stringify(job["data"])))
-      row.append(create_td(JSON.stringify(job["opts"])))
+      var row = create_job_row(index, job)
       $("#waiting_jobs").append(row)
     })
   })
 }
 window.setInterval(function() {
   fetch_waiting_jobs()
-}, 500);
+}, 250);
 
 
 // "Add job" handler
@@ -68,12 +71,29 @@ function add_job_handler() {
   console.log("add_job_handler")
   var data = $("#data").val()
   var priority = $("#priority").val()
-  console.log("Data: ", data, " | Priority: ", priority)
-  $.get("/add_job", { data: data, priority: priority }, function(data) {
+  var merchant_id = $("#merchant_id").val()
+  console.log("Data: ", data, " | Priority: ", priority, " | Merchant Id: ", merchant_id)
+  $.get("/add_job", { data: data, priority: priority, merchant_id: merchant_id}, function(data) {
     console.log("Response: ", data)
   })
 }
 $("#add_job").click(add_job_handler)
+
+// "Add job batch" handler
+function add_job_batch_handler() {
+  console.log("add_job_batch_handler")
+  var data = $("#data").val()
+  var priority = $("#priority").val()
+  var merchant_id = $("#merchant_id").val()
+  var batch = $("#batch").val()
+  console.log("Data: ", data, " | Priority: ", priority, " | Merchant Id: ", merchant_id, " | Batch: ", batch)
+  for (let i = 0; i < batch; i ++) {
+    $.get("/add_job", { data: data, priority: priority, merchant_id: merchant_id}, function(data) {
+      console.log("Response: ", data)
+    })
+  }
+}
+$("#add_job_batch").click(add_job_batch_handler)
 
 // Queue controls
 $("#pause").click(function() {

@@ -8,22 +8,35 @@ const CLEAN_GRACE_PERIOD = 1000;
 
 var bullQueue = new Queue(
   'Just a bunch of Bull$#!#',
+  'MyQueue',
   {
     limiter: { // RateLimiter
-      max: 5,         // Max number of jobs processed
-      duration: 1000, // per duration in milliseconds
+      max: 10,         // Max number of jobs processed
+      duration: 3000, // per duration in milliseconds
+    },
+    // WIP: we need to add this functionality & rename :^)
+    throttler: {
+      max: 5
     }
   }
 );
 
-bullQueue.process(function(job, done) {
+const getTimeout = function(range, rate){
+  return (Math.floor(Math.random() * range) + 1) * rate
+}
+
+console.log(Queue);
+// console.log(Queue.prototype);
+
+bullQueue.process(5, function(job, done) {
   console.log("Incoming $#!#:")
+  console.log("Id: ", job.id)
   console.log("Data: ", job["data"])
   console.log("Options: ", job["opts"])
   console.log("-----------------------------------------------------")
   setTimeout(function() {
     done()
-  }, 2000)
+  }, getTimeout(10, 500))
 });
 
 const app = Express()
@@ -42,17 +55,21 @@ app.get('/add_job', function(req, res) {
   console.log("/add_job")
   var data = req.query.data
   var priority = req.query.priority
+  var merchant_id = req.query.merchant_id
   console.log("data:", data)
   console.log("priority:", priority)
-  bullQueue.add(
+  console.log("merchant_id:", merchant_id)
+  // Job is a "promise" here
+  job = bullQueue.add(
     {
       data: data
     },
     {
-      priority: priority
+      priority: priority,
+      merchant_id: merchant_id
     }
   ).then(function() {
-    res.send("Job added. Data: " + data + " | Priority: " + priority)
+    res.send("Job added. Data: " + data + " | Priority: " + priority + " | Merchant Id: " + merchant_id);
   });
 })
 
@@ -114,4 +131,4 @@ app.get('/get_active', function(req, res) {
   })
 })
 
-app.listen(3000, () => console.log('Bull app listening on port 3000!'))
+app.listen(3000, () => console.log('Bull app listening on port 3000! http://localhost:3000'))

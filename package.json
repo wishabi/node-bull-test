@@ -1,0 +1,23 @@
+{
+  "name": "bull-test",
+  "version": "1.0.0",
+  "description": "A simple app to test out functionality of the Bull package",
+  "main": "bull.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wishabi/node-bull-test.git"
+  },
+  "author": "Chandeep Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wishabi/node-bull-test/issues"
+  },
+  "homepage": "https://github.com/wishabi/node-bull-test#readme",
+  "dependencies": {
+    "bull": "../bull",
+    "express": "^3.10.10"
+  }
+}
