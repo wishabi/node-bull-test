@@ -131,4 +131,11 @@ app.get('/get_active', function(req, res) {
   })
 })
 
+app.get('/get_delayed', function(req, res) {
+  // console.log("/get_delayed")
+  bullQueue.getDelayed().then(function(jobs) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(jobs, null, 3))
+  })
+})
 app.listen(3000, () => console.log('Bull app listening on port 3000! http://localhost:3000'))

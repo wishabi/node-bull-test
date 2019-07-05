@@ -16,7 +16,7 @@
   <div>
     <h1>Job Counts</h1>
     Active: <span id="active"></span><br>
-    Waiting: <span id="waiting"></span><br>
+    Delayed: <span id="waiting"></span><br>
     Completed: <span id="completed"></span><br>
     Failed: <span id="failed"></span><br>
     Delayed: <span id="delayed"></span><br>
@@ -69,6 +69,23 @@
         </tr>
       </thead>
       <tbody id="waiting_jobs">
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <h4>Delayed Jobs</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Job ID</th>
+          <th>Priority</th>
+          <th>Data</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody id="delayed_jobs">
       </tbody>
     </table>
   </div>

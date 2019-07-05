@@ -28,9 +28,6 @@ function fetch_count() {
     $("#delayed").text(data["delayed"])
   })
 }
-window.setInterval(function() {
-  fetch_count()
-}, 250);
 
 // Active job fetcher
 function fetch_active_jobs() {
@@ -45,10 +42,6 @@ function fetch_active_jobs() {
   })
 }
 
-window.setInterval(function() {
-  fetch_active_jobs()
-}, 250);
-
 // Waiting job fetcher
 function fetch_waiting_jobs() {
   // console.log("Fetching count")
@@ -61,10 +54,26 @@ function fetch_waiting_jobs() {
     })
   })
 }
-window.setInterval(function() {
-  fetch_waiting_jobs()
-}, 250);
 
+// Delayed job fetcher
+function fetch_delayed_jobs() {
+  // console.log("Fetching count")
+  $.getJSON("/get_delayed", function(data) {
+    // console.log("Response: ", data)
+    $("#delayed_jobs tr").remove()
+    $.each(data, function(index, job) {
+      var row = create_job_row(index, job)
+      $("#delayed_jobs").append(row)
+    })
+  })
+}
+
+window.setInterval(function() {
+  fetch_count()
+  fetch_active_jobs()
+  fetch_waiting_jobs()
+  fetch_delayed_jobs()
+}, 250);
 
 // "Add job" handler
 function add_job_handler() {
