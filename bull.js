@@ -12,12 +12,8 @@ var bullQueue = new Queue(
   {
     prefix: "leptin",
     limiter: { // RateLimiter
-      max: 10,         // Max number of jobs processed
-      duration: 3000, // per duration in milliseconds
-    },
-    // WIP: we need to add this functionality & rename :^)
-    throttler: {
-      max: 5
+      max: 2,         // Max number of jobs processed
+      duration: 10000, // per duration in milliseconds
     }
   }
 );
@@ -36,7 +32,7 @@ bullQueue.process(5, function(job, done) {
   console.log("-----------------------------------------------------")
   setTimeout(function() {
     done()
-  }, getTimeout(10, 500))
+  }, getTimeout(5, 1000))
 });
 
 const app = Express()
@@ -55,10 +51,10 @@ app.get('/add_job', function(req, res) {
   console.log("/add_job")
   var data = req.query.data
   var priority = req.query.priority
-  var throttle_id = req.query.throttle_id
+  var throttleId = req.query.throttleId
   console.log("data:", data)
   console.log("priority:", priority)
-  console.log("throttle_id:", throttle_id)
+  console.log("throttleId:", throttleId)
   // Job is a "promise" here
   job = bullQueue.add(
     {
@@ -66,10 +62,10 @@ app.get('/add_job', function(req, res) {
     },
     {
       priority: priority,
-      throttle_id: throttle_id
+      // throttleId: throttleId
     }
   ).then(function() {
-    res.send("Job added. Data: " + data + " | Priority: " + priority + " | Merchant Id: " + throttle_id);
+    res.send("Job added. Data: " + data + " | Priority: " + priority + " | Merchant Id: " + throttleId);
   });
 })
 
